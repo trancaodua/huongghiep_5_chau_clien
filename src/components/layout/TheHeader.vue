@@ -45,6 +45,7 @@ export default {
 </script>
 
 <style scoped>
+
 li {
     list-style: none;
 }
@@ -64,13 +65,14 @@ a {
 /* HEADER */
 header {
     position: relative;
-    padding: 0 2rem;
+    padding: 0.2rem 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 99;
 }
 
 .navbar {
     width: 100%;
-    height: 100px;
-    padding: 1rem;
+    padding: 0 1rem;
     margin: 0 auto;
     display: flex;
     align-items: center;

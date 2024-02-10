@@ -23,7 +23,7 @@ export default {
 }
 
 body {
-  height: 100vh;
+  height: 200vh;
 }
 
 #app {
