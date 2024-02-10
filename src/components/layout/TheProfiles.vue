@@ -7,9 +7,25 @@
                 </div>
                 <h5>{{ profile.field }} <span>({{ profile.country }})</span></h5>
                 <span>{{ profile.name }} </span>
-               <p>{{ profile.description }} </p>
+                <p>{{ profile.description }} </p>
+                <button class="detail-btn"><i class="fas fa-eye"></i> View Profile</button>
+                <ul class="social-container">
+                    <li>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"> <i class="fa-brands fa-skype"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"> <i class="fa-brands fa-twitter"></i></a>
+                    </li>
+                </ul>
             </div>
         </div>
+        <button class="more-btn"><i class="fa-solid fa-arrow-down"></i> Load More</button>
     </div>
 </template>
 
@@ -49,7 +65,7 @@ export default {
     /* border: 2px solid #e1e1e1; */
     box-shadow: 0.8rem 0.8rem 2rem #ddd, -0.8rem -0.8rem 2rem #eee;
     /* background-color: #eee; */
-    padding: 0.5rem;
+    padding: 0.8rem;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -96,7 +112,51 @@ export default {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    font-style:italic;
+    font-style: italic;
+}
+
+.detail-btn {
+    background: #1F9F96;
+    border: none;
+    height: 2rem;
+    width: 8rem;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin: 1rem 0;
+    cursor: pointer;
+}
+
+.more-btn {
+    background: #1F9F96;
+    border: none;
+    height: 2rem;
+    width: 8rem;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+.social-container {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-container a {
+    font-size: 1rem;
+    color: #1F9F96;
+    border-radius: 50%;
+    padding: 0.2rem;
+    border: 1px solid #1F9F96;
 }
 
 @media screen and (max-width: 600px) {

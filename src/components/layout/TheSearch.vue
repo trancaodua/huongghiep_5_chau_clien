@@ -80,6 +80,7 @@ export default {
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    margin-top: 2rem;
 }
 
 .container form {
