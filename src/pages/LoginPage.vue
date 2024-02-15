@@ -1,19 +1,46 @@
 <template>
     <div class="container">
-        <form>
+        <form @submit.prevent="submit">
             <h2>Login</h2>
             <div class="control-form">
                 <label for="email">Email Address*</label>
-                <input type="email" name="email">
+                <input type="email" name="email" v-model="email">
             </div>
             <div class="control-form">
                 <label for="password">Password*</label>
-                <input type="password" name="password">
+                <input type="password" name="password" v-model="password">
             </div>
             <button>Log In</button>
+            <p class="text">
+                Don't have an account?
+                <router-link to="/register">Register</router-link>
+            </p>
         </form>
     </div>
 </template>
+
+<script>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+export default {
+
+    setup() {
+        const email = ref(null);
+        const password = ref(null);
+
+        const store = useStore();
+
+        const submit = () => {
+            store.dispatch('auth/login', { email: email.value, password: password.value });
+        }
+        return {
+            email,
+            password,
+            submit
+        }
+    }
+}
+</script>
 
 <style scoped>
 .container {
@@ -72,10 +99,10 @@ form button {
     height: 2rem;
     border: none;
     outline: none;
-    color:white;
+    color: white;
     background-color: #1F9F96;
     cursor: pointer;
-    font-size:1.2rem;
+    font-size: 1.2rem;
     padding: 0.2rem;
     font-weight: bold;
 }

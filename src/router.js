@@ -6,6 +6,7 @@ import ProfileDetailVue from "./pages/profiles/ProfileDetail.vue";
 import ContactPageVue from "./pages/ContactPage.vue";
 import AdminPageVue from "./pages/AdminPage.vue";
 import LoginPageVue from "./pages/LoginPage.vue";
+import RegisterPageVue from './pages/RegisterPage.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -16,6 +17,7 @@ const router = createRouter({
         { path: "/contact", name: 'contact', component: ContactPageVue },
         { path: "/admin", component: AdminPageVue },
         { path: "/login", name:'login', component: LoginPageVue },
+        { path: "/register", name:'register', component: RegisterPageVue },
     ],
 });
 
