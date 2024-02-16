@@ -7,10 +7,15 @@
 <script>
 import TheHeader from './components/layout/TheHeader.vue';
 import TheFooter from './components/layout/TheFooter.vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'App',
-  components: { TheHeader, TheFooter}
+  components: { TheHeader, TheFooter },
+  setup() {
+    const store = useStore();
+    store.dispatch('auth/tryLogin');
+  }
 }
 </script>
 
@@ -22,10 +27,6 @@ export default {
   padding: 0;
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
-}
-
-body {
-  height: 200vh;
 }
 
 #app {

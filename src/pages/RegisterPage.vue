@@ -1,8 +1,8 @@
 <template>
     <div class="container">
-        <!-- <base-spinner v-if="isLoading"></base-spinner> -->
+        <base-spinner v-if="isLoading"></base-spinner>
         <form @submit.prevent="submit">
-            <h2>Login</h2>
+            <h2>Register</h2>
             <p class="error-form-text" v-if="formError">{{ formError }}</p>
             <div class="control-form" :class="{ invalid: email.error }">
                 <label for="email">Email Address*</label>
@@ -16,7 +16,7 @@
             </div>
             <div class="control-form" :class="{ invalid: confirmPassword.error }">
                 <label for="confirmPassword">Confirm Password*</label>
-                <input type="confirmPassword" name="confirmPassword" v-model.trim="confirmPassword.value"
+                <input type="password" name="confirmPassword" v-model.trim="confirmPassword.value"
                     @blur="clearValidity(confirmPassword)">
                 <p class="error-text" v-if="confirmPassword.error">{{ confirmPassword.error }}</p>
             </div>
@@ -25,7 +25,6 @@
                 Do have an account?
                 <router-link to="/login">Login</router-link>
             </p>
-            <p v-if="!formIsValid">Please fix the above errors and submit again.</p>
         </form>
     </div>
 </template>
@@ -33,6 +32,8 @@
 <script>
 import { reactive, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
 export default {
 
     setup() {
@@ -40,29 +41,43 @@ export default {
         const password = reactive({ value: null, error: null });
         const confirmPassword = reactive({ value: null, error: null });
         const formError = ref(null);
-        const isLoading = ref(true);
+        const isLoading = ref(false);
 
         const store = useStore();
+        const router = useRouter();
 
         const submit = async () => {
             //validation
             formError.value = null;
+            let error = false;
             if (!email.value) {
                 email.error = 'Email is required!';
+                error = true;
             }
 
             if (!password.value || password.value.length < 6) {
                 password.error = 'Password is required and should be min 6 characters long';
+                error = true;
             }
 
             if (!confirmPassword.value || confirmPassword.value != password.value) {
                 confirmPassword.error = 'Confirm password not match!';
+                error = true;
+            }
+
+            if (error) {
+                return;
             }
             try {
+                isLoading.value = true;
                 await store.dispatch('auth/signup', { email: email.value, password: password.value });
+                router.push({ name: 'home' });
             }
             catch (error) {
                 formError.value = error;
+            }
+            finally {
+                isLoading.value = false;
             }
         }
         const clearValidity = (input) => {
@@ -158,7 +173,7 @@ form button {
     border: 1px solid red;
 }
 
-.error-form-text{
+.error-form-text {
     color: red;
 }
 
