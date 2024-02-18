@@ -33,10 +33,10 @@ export default {
     const email = localStorage.getItem("email");
     let role = localStorage.getItem("role");
     role = role ? JSON.parse(role) : [];
-
-    // apiService.defaults.headers["X-CSRF-Token"] = token;
+    apiService.defaults.headers["X-CSRF-Token"] = token;
 
     if (token && email) {
+      console.log(1111);
       context.commit("setUser", {
         token: token,
         email: email,

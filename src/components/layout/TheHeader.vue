@@ -38,8 +38,9 @@
 
 <script>
 import { ref, watch, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, } from 'vue-router';
 import { useStore } from 'vuex';
+import useLogout from '@/hooks/logout.js';
 
 export default {
     setup() {
@@ -47,7 +48,9 @@ export default {
         const isOpenMobileNav = ref(false);
         const isLoading = ref(false);
         const route = useRoute();
+        //const router = useRouter();
         const store = useStore();
+        const [logoutHook] = useLogout();
 
         function toggleOpenMobileNav() {
             isOpenMobileNav.value = !isOpenMobileNav.value;
@@ -55,7 +58,7 @@ export default {
 
         const logout = async () => {
             try {
-                await store.dispatch('auth/logout');
+               await logoutHook();
             }
             finally {
                 isLoading.value = false;
@@ -64,7 +67,7 @@ export default {
 
 
         const isLoggedIn = computed(() => {
-            return store.getters['auth/isAuthenticated'];
+            return store.getters['isAuthenticated'];
         })
 
         watch(route, () => {

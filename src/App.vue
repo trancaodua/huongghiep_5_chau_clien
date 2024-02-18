@@ -14,8 +14,9 @@ export default {
   components: { TheHeader, TheFooter },
   setup() {
     const store = useStore();
-    store.dispatch('auth/tryLogin');
-  }
+    store.dispatch('tryLogin');
+    store.dispatch('countries/get');
+  },
 }
 </script>
 

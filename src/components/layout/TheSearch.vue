@@ -53,6 +53,7 @@ export default {
         const fields = computed(() => {
             return store.getters['fields/fields'];
         })
+        
         const genders = computed(() => {
             return store.getters['genders/genders'];
         })

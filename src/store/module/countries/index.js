@@ -6,32 +6,7 @@ export default {
   namespaced: true,
   state() {
     return {
-      countries: [
-        {
-          id: "1",
-          name: "Viet Nam",
-        },
-        {
-          id: "2",
-          name: "Trung Quoc",
-        },
-        {
-          id: "3",
-          name: "My",
-        },
-        {
-          id: "4",
-          name: "Viet Nam",
-        },
-        {
-          id: "5",
-          name: "Trung Quoc",
-        },
-        {
-          id: "6",
-          name: "My",
-        },
-      ],
+      countries: [],
     };
   },
   mutations,

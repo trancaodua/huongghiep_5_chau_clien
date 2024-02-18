@@ -2,7 +2,7 @@
     <div class="container">
         <base-spinner v-if="isLoading"></base-spinner>
         <form @submit.prevent="submit">
-            <h2>Register</h2>
+            <h2>Login</h2>
             <p class="error-form-text" v-if="formError">{{ formError }}</p>
             <div class="control-form" :class="{ invalid: email.error }">
                 <label for="email">Email Address*</label>
@@ -59,7 +59,7 @@ export default {
             }
             try {
                 isLoading.value = true;
-                await store.dispatch('auth/login', { email: email.value, password: password.value });
+                await store.dispatch('login', { email: email.value, password: password.value });
                 if (route.query.redirect) {
                     router.push({ name: route.query.redirect });
                 }

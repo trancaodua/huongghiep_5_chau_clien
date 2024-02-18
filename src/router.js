@@ -7,6 +7,7 @@ import ContactPageVue from "./pages/ContactPage.vue";
 import AdminPageVue from "./pages/AdminPage.vue";
 import LoginPageVue from "./pages/LoginPage.vue";
 import RegisterPageVue from "./pages/RegisterPage.vue";
+import CountryPageVue from "./pages/admin/countryPage.vue";
 import store from "./store/index.js";
 
 const router = createRouter({
@@ -21,15 +22,26 @@ const router = createRouter({
     },
     { path: "/profile/:id", component: ProfileDetailVue },
     { path: "/contact", name: "contact", component: ContactPageVue },
-    { path: "/admin", component: AdminPageVue },
+    {
+      path: "/admin/country",
+      component: CountryPageVue,
+    },
+    {
+      path: "/admin",
+      component: AdminPageVue,
+      children: [
+        { path: "country", component: CountryPageVue }, // /coaches/c1/contact
+      ],
+    },
+
     { path: "/login", name: "login", component: LoginPageVue },
     { path: "/register", name: "register", component: RegisterPageVue },
   ],
 });
 
 router.beforeEach(function (to, from, next) {
-  if (to.meta.requiresAuth && !store.getters["auth/isAuthenticated"]) {
-    console.log(to);
+  console.log(2222);
+  if (to.meta.requiresAuth && !store.getters["isAuthenticated"]) {
     next({ name: "login", query: { redirect: to.name } });
   } else {
     next();

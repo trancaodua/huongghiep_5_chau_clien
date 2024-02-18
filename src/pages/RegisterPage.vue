@@ -70,7 +70,7 @@ export default {
             }
             try {
                 isLoading.value = true;
-                await store.dispatch('auth/signup', { email: email.value, password: password.value });
+                await store.dispatch('signup', { email: email.value, password: password.value });
                 router.push({ name: 'home' });
             }
             catch (error) {
