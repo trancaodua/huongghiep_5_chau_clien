@@ -25,9 +25,9 @@
                 </label>
             </div>
             <div>
-                <label class="check_container" v-for="field in fields" :key="field.id">
+                <label class="check_container" v-for="field in fields" :key="field.name">
                     {{ field.name }}
-                    <input type="checkbox" :value="field.id" v-model="fieldsInput.value">
+                    <input type="checkbox" :value="field.name" v-model="fieldsInput.value">
                     <span class="checkmark"></span>
                 </label>
             </div>
@@ -55,7 +55,7 @@ export default {
         const nameInput = reactive({ value: null, error: null });
         const descriptionInput = reactive({ value: null, error: null });
         const imageInput = reactive({ value: null, error: null });
-        const countriesInput = reactive({ value: [1], error: null })
+        const countriesInput = reactive({ value: [], error: null })
         const fieldsInput = reactive({ value: [], error: null })
         const gendersInput = reactive({ value: [], error: null })
 
@@ -84,7 +84,7 @@ export default {
                 const file = e.target.files[0];
                 imageInput.value = await toBase64(file);
                 previewImage.value = window.URL.createObjectURL(file);
-                await store.dispatch('profiles/uploadImage', { image: previewImage.value });
+                // await store.dispatch('profiles/uploadImage', { image: previewImage.value });
             } catch (err) {
                 console.log(err);
             }

@@ -3,9 +3,10 @@
         <div class="card-wrapper">
             <div class="card" v-for="profile in profiles" :key="profile.id">
                 <div class="img">
-                    <img src="@/assets/logo.jpg" alt="{{profile.name}}" draggable="false">
+                    <img :src="profile.avatar" :alt="profile.name" draggable="false">
                 </div>
-                <h5>{{ profile.field }} <span>({{ profile.country }})</span></h5>
+                <h5 v-if="profile.fields">{{ profile.fields.join(', ') }} <span v-if="profile.countries">({{
+                    profile.countries.join(', ') }})</span></h5>
                 <span>{{ profile.name }} </span>
                 <p>{{ profile.description }} </p>
                 <button class="detail-btn"><i class="fas fa-eye"></i> View Profile</button>
@@ -25,7 +26,7 @@
                 </ul>
             </div>
         </div>
-        <button class="more-btn"><i class="fa-solid fa-arrow-down"></i> Load More</button>
+        <button @click="handleLoadMore" class="more-btn"><i class="fa-solid fa-arrow-down"></i> Load More</button>
     </div>
 </template>
 
@@ -38,8 +39,14 @@ export default {
         const store = useStore();
         const profiles = computed(() => store.getters["profiles/profiles"]);
 
+        const handleLoadMore = async () => {
+            store.commit('profiles/setCurrentPage', store.getters['profiles/currentPage'] + 1);
+            store.dispatch('profiles/get');
+        }
+
         return {
-            profiles
+            profiles,
+            handleLoadMore
         }
     },
 }

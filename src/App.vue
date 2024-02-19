@@ -15,7 +15,9 @@ export default {
   setup() {
     const store = useStore();
     store.dispatch('tryLogin');
+    store.dispatch('profiles/get');
     store.dispatch('countries/get');
+    store.dispatch('fields/get');
   },
 }
 </script>

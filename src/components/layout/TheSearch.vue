@@ -1,25 +1,25 @@
 <template>
     <div class="container">
-        <form>
+        <form @submit.prevent="handleSubmit">
             <div class="form-control">
-                <input class="query" type="text" placeholder="Search">
+                <input class="query" type="text" placeholder="Search" v-model.trim="query">
                 <button class="query_btn" type="submit"> <i class="fas fa-search"></i></button>
             </div>
-            <div class="filter"  @click="toggleShowFilter(true)"><i class="icon fa-solid fa-sliders"></i></div>
+            <div class="filter" @click="toggleShowFilter(true)"><i class="icon fa-solid fa-sliders"></i></div>
             <div v-show="isShowFilter" class="filter_container">
                 <h3>Quốc gia</h3>
                 <div class="checkbox-control">
-                    <label class="check_container" v-for="country in countries" :key="country.id">
+                    <label class="check_container" v-for="country in countries" :key="country.name">
                         {{ country.name }}
-                        <input type="checkbox" :value="country.id" v-model="countries">
+                        <input type="checkbox" :value="country.name" v-model="countriesInput">
                         <span class="checkmark"></span>
                     </label>
                 </div>
                 <h3>Lĩnh vực</h3>
                 <div class="checkbox-control">
-                    <label class="check_container" v-for="field in fields" :key="field.id">
+                    <label class="check_container" v-for="field in fields" :key="field.name">
                         {{ field.name }}
-                        <input type="checkbox" :value="field.id" v-model="fields">
+                        <input type="checkbox" :value="field.name" v-model="fieldsInput">
                         <span class="checkmark"></span>
                     </label>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="checkbox-control">
                     <label class="check_container" v-for="gender in genders" :key="gender.id">
                         {{ gender.name }}
-                        <input type="checkbox" :value="gender.id" v-model="genders">
+                        <input type="checkbox" :value="gender.id" v-model="gendersInput">
                         <span class="checkmark"></span>
                     </label>
                 </div>
@@ -46,6 +46,10 @@ import { useStore } from 'vuex';
 export default {
     setup() {
         const isShowFilter = ref(false);
+        const query = ref(null);
+        const countriesInput = ref([]);
+        const fieldsInput = ref([]);
+        const gendersInput = ref([]);
         const store = useStore();
         const countries = computed(() => {
             return store.getters['countries/countries'];
@@ -53,21 +57,51 @@ export default {
         const fields = computed(() => {
             return store.getters['fields/fields'];
         })
-        
+
         const genders = computed(() => {
             return store.getters['genders/genders'];
         })
 
         const toggleShowFilter = (isShow) => {
-            console.log(isShow);
             isShowFilter.value = isShow;
+        }
+
+        const handleSubmit = async () => {
+            try {
+                const payload = {};
+                if (query.value) {
+                    payload.query = query.value;
+                }
+
+                if (countriesInput.value && countriesInput.value.length > 0) {
+                    payload.countries = countriesInput.value;
+                }
+
+                if (fieldsInput.value && fieldsInput.value.length > 0) {
+                    payload.fields = fieldsInput.value;
+                }
+
+
+                if (gendersInput.value && gendersInput.value.length > 0) {
+                    payload.genders = gendersInput.value;
+                }
+
+                await store.dispatch('profiles/get', payload);
+            } catch (error) {
+                console.log(error);
+            }
         }
         return {
             countries,
             fields,
             genders,
             isShowFilter,
-            toggleShowFilter
+            toggleShowFilter,
+            handleSubmit,
+            query,
+            countriesInput,
+            fieldsInput,
+            gendersInput
         }
     }
 }

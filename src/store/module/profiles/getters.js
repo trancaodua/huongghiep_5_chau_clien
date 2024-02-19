@@ -1,5 +1,8 @@
 export default {
-    profiles(state) {
-        return state.profiles;
-    },
-}
+  profiles(state) {
+    return state.profiles;
+  },
+  currentPage(state) {
+    return state.currentPage;
+  },
+};

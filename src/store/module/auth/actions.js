@@ -36,7 +36,6 @@ export default {
     apiService.defaults.headers["X-CSRF-Token"] = token;
 
     if (token && email) {
-      console.log(1111);
       context.commit("setUser", {
         token: token,
         email: email,
@@ -46,7 +45,6 @@ export default {
   },
   async logout(context) {
     try {
-      console.log(context.getters["token"]);
       await apiService.post("/api/logout", {
         token: context.getters["token"],
       });

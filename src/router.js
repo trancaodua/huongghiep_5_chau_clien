@@ -8,6 +8,7 @@ import AdminPageVue from "./pages/AdminPage.vue";
 import LoginPageVue from "./pages/LoginPage.vue";
 import RegisterPageVue from "./pages/RegisterPage.vue";
 import CountryPageVue from "./pages/admin/countryPage.vue";
+import FieldPageVue from "./pages/admin/fieldPage.vue";
 import store from "./store/index.js";
 
 const router = createRouter({
@@ -27,6 +28,10 @@ const router = createRouter({
       component: CountryPageVue,
     },
     {
+      path: "/admin/field",
+      component: FieldPageVue,
+    },
+    {
       path: "/admin",
       component: AdminPageVue,
       children: [
@@ -40,7 +45,6 @@ const router = createRouter({
 });
 
 router.beforeEach(function (to, from, next) {
-  console.log(2222);
   if (to.meta.requiresAuth && !store.getters["isAuthenticated"]) {
     next({ name: "login", query: { redirect: to.name } });
   } else {
