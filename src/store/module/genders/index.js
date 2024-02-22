@@ -8,11 +8,11 @@ export default {
     return {
       genders: [
         {
-          id: "0",
+          id: 0,
           name: "Nam",
         },
         {
-          id: "1",
+          id: 1,
           name: "Nữ",
         },
       ],

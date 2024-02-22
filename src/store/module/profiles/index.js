@@ -8,6 +8,9 @@ export default {
     return {
       profiles: [],
       currentPage: 1,
+      limit: 9,
+      pages: 1,
+      query: null,
     };
   },
   mutations,

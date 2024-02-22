@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <base-spinner v-if="isLoading"></base-spinner>
         <form @submit.prevent="submit">
             <h2>Login</h2>
             <p class="error-form-text" v-if="formError">{{ formError }}</p>
@@ -34,7 +33,6 @@ export default {
         const email = reactive({ value: null, error: null });
         const password = reactive({ value: null, error: null });
         const formError = ref(null);
-        const isLoading = ref(false);
 
         const store = useStore();
         const router = useRouter();
@@ -58,7 +56,7 @@ export default {
                 return;
             }
             try {
-                isLoading.value = true;
+                store.commit('setLoading', true);
                 await store.dispatch('login', { email: email.value, password: password.value });
                 if (route.query.redirect) {
                     router.push({ name: route.query.redirect });
@@ -72,7 +70,7 @@ export default {
                 formError.value = error;
             }
             finally {
-                isLoading.value = false;
+                store.commit('setLoading', false);
             }
         }
         const clearValidity = (input) => {
@@ -85,7 +83,6 @@ export default {
             submit,
             clearValidity,
             formError,
-            isLoading
         }
     }
 }

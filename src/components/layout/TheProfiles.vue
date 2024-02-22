@@ -9,7 +9,7 @@
                     profile.countries.join(', ') }})</span></h5>
                 <span>{{ profile.name }} </span>
                 <p>{{ profile.description }} </p>
-                <button class="detail-btn"><i class="fas fa-eye"></i> View Profile</button>
+                <router-link :to="`/profile/${profile._id}`" class="detail-btn"><i class="fas fa-eye"></i> View Profile</router-link>
                 <ul class="social-container">
                     <li>
                         <a href="#"><i class="fa-brands fa-facebook"></i></a>
@@ -26,7 +26,8 @@
                 </ul>
             </div>
         </div>
-        <button @click="handleLoadMore" class="more-btn"><i class="fa-solid fa-arrow-down"></i> Load More</button>
+        <button v-if="isShowLoadMore" @click="handleLoadMore" class="more-btn"><i class="fa-solid fa-arrow-down"></i> Load
+            More</button>
     </div>
 </template>
 
@@ -41,12 +42,23 @@ export default {
 
         const handleLoadMore = async () => {
             store.commit('profiles/setCurrentPage', store.getters['profiles/currentPage'] + 1);
-            store.dispatch('profiles/get');
+            try {
+                store.commit('setLoading', true);
+                store.dispatch('profiles/get');
+            }
+            finally {
+                store.commit('setLoading', false);
+            }
         }
+
+        const isShowLoadMore = computed(() => {
+            return store.getters['profiles/currentPage'] < store.getters['profiles/pages'];
+        })
 
         return {
             profiles,
-            handleLoadMore
+            handleLoadMore,
+            isShowLoadMore
         }
     },
 }

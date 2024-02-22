@@ -1,4 +1,5 @@
 <template>
+  <base-spinner v-if="isLoading"></base-spinner>
   <the-header></the-header>
   <router-view></router-view>
   <the-footer></the-footer>
@@ -8,6 +9,7 @@
 import TheHeader from './components/layout/TheHeader.vue';
 import TheFooter from './components/layout/TheFooter.vue';
 import { useStore } from 'vuex';
+import { computed } from 'vue';
 
 export default {
   name: 'App',
@@ -18,6 +20,11 @@ export default {
     store.dispatch('profiles/get');
     store.dispatch('countries/get');
     store.dispatch('fields/get');
+    const isLoading = computed(() => store.getters['loading']);
+
+    return {
+      isLoading
+    }
   },
 }
 </script>

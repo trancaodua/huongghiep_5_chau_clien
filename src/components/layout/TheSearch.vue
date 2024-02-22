@@ -34,6 +34,7 @@
                 <button type="button" class="faq-toggle" @click="toggleShowFilter(false)">
                     <i class="fas fa-times"></i>
                 </button>
+                <button class="search-btn">Search</button>
             </div>
         </form>
     </div>
@@ -68,27 +69,39 @@ export default {
 
         const handleSubmit = async () => {
             try {
-                const payload = {};
+                const queries = [];
+
                 if (query.value) {
-                    payload.query = query.value;
+                    queries.push(`query=${query.value}`);
                 }
 
                 if (countriesInput.value && countriesInput.value.length > 0) {
-                    payload.countries = countriesInput.value;
+                    queries.push(`countries=${countriesInput.value.join(",")}`);
                 }
 
                 if (fieldsInput.value && fieldsInput.value.length > 0) {
-                    payload.fields = fieldsInput.value;
+                    queries.push(`fields=${fieldsInput.value.join(",")}`);
                 }
 
 
                 if (gendersInput.value && gendersInput.value.length > 0) {
-                    payload.genders = gendersInput.value;
+                    queries.push(`genders=${gendersInput.value.join(",")}`);
                 }
 
-                await store.dispatch('profiles/get', payload);
+                if (queries.length > 0) {
+                    store.commit('profiles/setQuery', queries.join("&"));
+                }
+                else {
+                    store.commit('profiles/setQuery', null);
+                }
+                store.commit('profiles/resetProfile', null);
+                store.commit('profiles/setCurrentPage', 1);
+                await store.dispatch('profiles/get');
             } catch (error) {
                 console.log(error);
+            }
+            finally {
+                toggleShowFilter(false);
             }
         }
         return {
@@ -282,5 +295,17 @@ form .filter_container {
     text-align: left;
     margin: 0.5rem 0;
     color: #1F9F96;
+}
+
+.search-btn {
+    width: 4rem;
+    height: 1.5rem;
+    font-size: 1rem;
+    background-color: #1F9F96;
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin-top: 1rem;
 }
 </style>

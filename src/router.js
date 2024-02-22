@@ -21,7 +21,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
       name: "createProfile",
     },
-    { path: "/profile/:id", component: ProfileDetailVue },
+    { path: "/profile/:id", component: ProfileDetailVue,   props: true, },
     { path: "/contact", name: "contact", component: ContactPageVue },
     {
       path: "/admin/country",
