@@ -9,8 +9,10 @@
                     profile.countries.join(', ') }})</span></h5>
                 <span>{{ profile.name }} </span>
                 <p>{{ profile.description }} </p>
-                <router-link :to="`/profile/${profile._id}`" class="detail-btn"><i class="fas fa-eye"></i> View
-                    Profile</router-link>
+                <router-link :to="`/profile/${profile._id}`" class="detail-btn"><i
+                        class="fas fa-eye"></i> Detail</router-link>
+                <router-link :to="`/user/profile/${profile._id}`" class="detail-btn"><i
+                        class="fas fa-eye"></i> Edit</router-link>
                 <ul class="social-container">
                     <li v-if="profile.facebook">
                         <a :href="profile.facebook" target="blank"><i class="fa-brands fa-facebook"></i></a>
@@ -27,39 +29,37 @@
                 </ul>
             </div>
         </div>
-        <button v-if="isShowLoadMore" @click="handleLoadMore" class="more-btn"><i class="fa-solid fa-arrow-down"></i> Load
-            More</button>
     </div>
 </template>
 
 <script>
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { ref } from "vue";
+import apiService from "@/app/apiService";
 
 export default {
     setup() {
         const store = useStore();
-        const profiles = computed(() => store.getters["profiles/profiles"]);
+        const profiles = ref([]);
 
-        const handleLoadMore = async () => {
-            store.commit('profiles/setCurrentPage', store.getters['profiles/currentPage'] + 1);
+        const fetchProfiles = async () => {
             try {
-                store.commit('setLoading', true);
-                store.dispatch('profiles/get');
+                store.commit('isLoading', true);
+                const { data } = await apiService.get('/api/user/profile');
+                profiles.value = data;
+            }
+            catch (error) {
+                console.log(error);
             }
             finally {
-                store.commit('setLoading', false);
+                store.commit('isLoading', false);
             }
         }
 
-        const isShowLoadMore = computed(() => {
-            return store.getters['profiles/currentPage'] < store.getters['profiles/pages'];
-        })
+        fetchProfiles();
 
         return {
             profiles,
-            handleLoadMore,
-            isShowLoadMore
         }
     },
 }
@@ -89,7 +89,7 @@ export default {
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.5rem;
 }
 
 .card .img {
@@ -138,19 +138,23 @@ export default {
 .detail-btn {
     background: #1F9F96;
     border: none;
-    height: 2rem;
-    width: 8rem;
+    height: 1.5rem;
+    width: 6rem;
     border-radius: 0.5rem;
     color: #fff;
     font-size: 0.9rem;
     font-weight: bold;
-    margin: 1rem 0;
+    margin: 0;
     cursor: pointer;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
+}
+
+.detail-btn i {
+    margin-right: 2px;
 }
 
 .more-btn {

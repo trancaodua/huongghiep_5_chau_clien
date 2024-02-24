@@ -8,7 +8,7 @@
             <i class="fa-solid fa-upload"></i>
         </label>
         <div class="image-container">
-            <div class="preview-container" :key="index" v-for="(certificate, index) in certificateInput.value">
+            <div class="preview-container" :key="certificate" v-for="certificate in certificateInput.value">
                 <img class="preview-image" :src="certificate">
                 <button class="remote-btn" @click="handleRemove(certificate)"><i class="fa-solid fa-trash-can"></i></button>
             </div>

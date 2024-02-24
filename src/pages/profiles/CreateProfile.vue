@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <form @submit.prevent="handleSubmit">
-            <h2>Create Profile</h2>
+            <h2>{{ profileId ? 'Edit Profile' : 'Create Profile' }}</h2>
             <p class="error-form-text" v-if="formError">{{ formError }}</p>
             <div class="control-form" :class="{ invalid: nameInput.error }">
                 <label>Name*</label>
@@ -95,27 +95,29 @@
                 <input type="url" name="twitterInput" v-model.trim="twitterInput.value" />
             </div>
             <button>
-                Create
+                {{ profileId ? 'Update' : 'Create' }}
             </button>
         </form>
     </div>
 </template>
 <script>
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, watch } from 'vue';
 import { useStore } from 'vuex';
 import Datepicker from 'vue3-datepicker';
 import TheSkills from '@/components/ui/form/TheSkills.vue';
 import TheCertificate from '@/components/ui/form/TheCertificate.vue';
 import TheEducation from '@/components/ui/form/TheEducationExperience.vue';
+import apiService from '@/app/apiService';
 
 export default {
+    props: ['id'],
     components: {
         Datepicker,
         TheSkills,
         TheCertificate,
         TheEducation
     },
-    setup() {
+    setup(props) {
         const store = useStore()
         const previewImage = ref(null);
         const nameInput = reactive({ value: null, error: null });
@@ -228,7 +230,8 @@ export default {
 
 
                 if (error) return;
-                await store.dispatch('profiles/create', {
+
+                const payload = {
                     name: nameInput.value,
                     description: descriptionInput.value,
                     avatar: imageInput.value,
@@ -244,7 +247,10 @@ export default {
                     certificate: certificateInput.value,
                     education: educationInput.value,
                     experience: experienceInput.value
-                });
+                };
+
+                if (profileId.value) payload.id = profileId.value;
+                await store.dispatch('profiles/create', payload);
             } catch (error) {
                 formError.value = error;
             } finally {
@@ -278,9 +284,11 @@ export default {
             certificateInput.value.splice(certificateInput.value.indexOf(certificate), 1);
         }
 
+
         const handleAddEducation = async (education) => {
             if (educationInput.value.some(item => item.title === education.title)) return;
-            educationInput.value.unshift({ ...education, from: new Intl.DateTimeFormat("en-US").format(education.from), to: new Intl.DateTimeFormat("en-US").format(education.to) });
+
+            educationInput.value.unshift({ ...education });
         }
 
         const handleRemoveEducation = async (education) => {
@@ -289,12 +297,64 @@ export default {
 
         const handleAddExperience = async (experience) => {
             if (experienceInput.value.some(item => item.title === experience.title)) return;
-            experienceInput.value.unshift({ ...experience, from: new Intl.DateTimeFormat("en-US").format(experience.from), to: new Intl.DateTimeFormat("en-US").format(experience.to) });
+            experienceInput.value.unshift({ ...experience });
         }
 
         const handleRemoveExperience = async (experience) => {
             experienceInput.value.splice(experienceInput.value.indexOf(experience), 1);
         }
+
+        const profileId = computed(() => { return props.id; });
+        watch(profileId, () => {
+            if (profileId.value) {
+                fetchProfiles();
+            }
+            else {
+                nameInput.value = null;
+                descriptionInput.value = null;
+                imageInput.value = null;
+                countriesInput.value = [];
+                fieldsInput.value = [];
+                gendersInput.value = null;
+                birthdayInput.value = null;
+                facebookInput.value = null;
+                instagramInput.value = null;
+                skypeInput.value = null;
+                twitterInput.value = null;
+                skillsInput.value = [];
+                certificateInput.value = [];
+                educationInput.value = [];
+                experienceInput.value = [];
+            }
+
+        })
+        const fetchProfiles = async () => {
+            if (!profileId.value) return;
+            try {
+
+                const { data } = await apiService.get(`api//user/profile/${profileId.value}`);
+                nameInput.value = data.name;
+                descriptionInput.value = data.description;
+                imageInput.value = data.avatar;
+                countriesInput.value = data.countries;
+                fieldsInput.value = data.fields;
+                gendersInput.value = data.gender;
+                birthdayInput.value = new Date(data.birthday);
+                facebookInput.value = data.facebook;
+                instagramInput.value = data.instagram;
+                skypeInput.value = data.skype;
+                twitterInput.value = data.twitter;
+                skillsInput.value = data.skills;
+                certificateInput.value = data.certificate;
+                educationInput.value = data.education.map(item => { return { ...item, from: new Date(item.from), to: new Date(item.to) } });
+                experienceInput.value = data.experience.map(item => { return { ...item, from: new Date(item.from), to: new Date(item.to) } });
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+
+        fetchProfiles();
 
         return {
             handleImage,
@@ -326,7 +386,8 @@ export default {
             handleRemoveEducation,
             experienceInput,
             handleAddExperience,
-            handleRemoveExperience
+            handleRemoveExperience,
+            profileId
         }
     }
 }

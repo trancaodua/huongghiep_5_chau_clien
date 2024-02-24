@@ -8,4 +8,7 @@ export default {
   isAuthenticated(state) {
     return !!state.token;
   },
+  isAdmin(state) {
+    return !!state.token && state.role.includes("admin");
+  },
 };

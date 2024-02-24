@@ -7,6 +7,8 @@
                 <li> <router-link class="link" :to="{ name: 'home' }">Home</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'contact' }">Contact</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link></li>
+                <li> <router-link class="link" :to="{ name: 'admin' }">Admin</router-link></li>
+                <li v-if="isLoggedIn"> <router-link class="link" :to="{ name: 'user-profile' }">My Profile</router-link></li>
             </ul>
             <button @click="logout" v-if="isLoggedIn" class="action_btn"><i
                     class="fa-solid fa-right-to-bracket"></i>Logout</button>
@@ -26,6 +28,8 @@
                 <li> <router-link class="link" :to="{ name: 'home' }">Home</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'contact' }">Contact</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link></li>
+                <li> <router-link class="link" :to="{ name: 'admin' }">Admin</router-link></li>
+                <li> <router-link class="link" :to="{ name: 'user-profile' }">Myprofile</router-link></li>
 
                 <li>
                     <button class="link" @click="logout" v-if="isLoggedIn">Logout</button>
@@ -58,7 +62,7 @@ export default {
 
         const logout = async () => {
             try {
-               await logoutHook();
+                await logoutHook();
             }
             finally {
                 isLoading.value = false;

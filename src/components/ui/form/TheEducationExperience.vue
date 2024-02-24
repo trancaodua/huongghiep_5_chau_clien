@@ -23,7 +23,7 @@
         <div>
             <div v-for="education in educationInput.value" :key="education.title">
                 <p>
-                    <i class="fa-solid fa-circle-check"></i>: {{ `${education.from}-${education.to} - ${education.title}:
+                    <i class="fa-solid fa-circle-check"></i>: {{ `${getFormattedDate(education.from)}-${getFormattedDate(education.to)} - ${education.title}:
                                         ${education.description}` }}
                 </p>
                 <button @click="handleRemove(education)" type="button">Remove</button>
@@ -49,9 +49,18 @@ export default {
             newEducation.title = null;
             newEducation.description = null;
         }
+
+        function getFormattedDate(date) {
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+
+            return day + '/' + month + '/' + year;
+        }
         return {
             newEducation,
-            add
+            add,
+            getFormattedDate
         }
     },
 }

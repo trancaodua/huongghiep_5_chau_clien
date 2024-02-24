@@ -32,7 +32,7 @@
 <script>
 import { reactive, ref } from 'vue';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 export default {
 
@@ -45,6 +45,7 @@ export default {
 
         const store = useStore();
         const router = useRouter();
+        const route = useRoute();
 
         const submit = async () => {
             //validation
@@ -70,7 +71,7 @@ export default {
             }
             try {
                 isLoading.value = true;
-                await store.dispatch('signup', { email: email.value, password: password.value });
+                await store.dispatch('signup', { email: email.value, password: password.value, isAdmin: route.name === 'admin-register' });
                 router.push({ name: 'home' });
             }
             catch (error) {

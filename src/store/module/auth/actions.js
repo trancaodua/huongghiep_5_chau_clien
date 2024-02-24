@@ -13,6 +13,7 @@ export default {
       const { data } = await apiService.post(url, {
         email: payload.email,
         password: payload.password,
+        isAdmin: payload.isAdmin,
       });
       context.commit("setUser", {
         email: data.email,
