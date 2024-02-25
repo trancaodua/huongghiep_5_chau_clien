@@ -9,6 +9,7 @@ import LoginPageVue from "./pages/LoginPage.vue";
 import RegisterPageVue from "./pages/RegisterPage.vue";
 import CountryPageVue from "./pages/admin/countryPage.vue";
 import FieldPageVue from "./pages/admin/fieldPage.vue";
+import ProfilePageVue from "./pages/admin/profilePage.vue";
 import UserProfile from "./pages/user/ProfilePage.vue";
 import store from "./store/index.js";
 
@@ -25,7 +26,14 @@ const router = createRouter({
     { path: "/profile/:id", component: ProfileDetailVue, props: true },
     { path: "/contact", name: "contact", component: ContactPageVue },
     {
+      path: "/admin",
+      component: AdminPageVue,
+      meta: { requiresAdmin: true },
+      name: "admin",
+    },
+    {
       path: "/admin/country",
+      name:'admin-country',
       component: CountryPageVue,
       meta: { requiresAdmin: true },
     },
@@ -37,28 +45,35 @@ const router = createRouter({
     },
     {
       path: "/admin/field",
+      name: 'admin-major',
       component: FieldPageVue,
       meta: { requiresAdmin: true },
     },
     {
-      path: "/admin",
-      component: AdminPageVue,
+      path: "/admin/profile",
+      name: 'admin-profile',
+      component: ProfilePageVue,
       meta: { requiresAdmin: true },
-      name: "admin",
     },
-
+    {
+      path: "/admin/profile/:id",
+      name: "admin-edit-profile",
+      meta: { requiresAdmin: true },
+      component: CreateProfileVue,
+      props: true,
+    },
     { path: "/login", name: "login", component: LoginPageVue },
     { path: "/register", name: "register", component: RegisterPageVue },
     {
       path: "/user/profile",
-      meta: { requiresAdmin: true },
+      meta: { requiresAuth: true },
       name: "user-profile",
       component: UserProfile,
     },
     {
       path: "/user/profile/:id",
       name: "user-edit-profile",
-      meta: { requiresAdmin: true },
+      meta: { requiresAuth: true },
       component: CreateProfileVue,
       props: true,
     },

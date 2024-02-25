@@ -3,12 +3,16 @@
         <base-spinner v-if="isLoading"></base-spinner>
         <div class="navbar">
             <div class="logo"><router-link :to="{ name: 'home' }"><img src="@/assets/logo.jpg"></router-link></div>
-            <ul class="links">
+            <ul v-if="isAdmin" class="links">
+                <li> <router-link class="link" :to="{ name: 'admin' }">Admin</router-link></li>
+                <li> <router-link class="link" :to="{ name: 'admin-major' }">Config Major</router-link></li>
+                <li> <router-link class="link" :to="{ name: 'admin-country' }">Config Country</router-link></li>
+                <li> <router-link class="link" :to="{ name: 'admin-profile' }">Config Profile</router-link></li>
+            </ul>
+            <ul v-else class="links">
                 <li> <router-link class="link" :to="{ name: 'home' }">Home</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'contact' }">Contact</router-link></li>
-                <li> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'admin' }">Admin</router-link></li>
-                <li v-if="isLoggedIn"> <router-link class="link" :to="{ name: 'user-profile' }">My Profile</router-link></li>
             </ul>
             <button @click="logout" v-if="isLoggedIn" class="action_btn"><i
                     class="fa-solid fa-right-to-bracket"></i>Logout</button>
@@ -24,13 +28,22 @@
                 <div class="dropdown_toggle_btn" @click="toggleOpenMobileNav">
                     <i class="fa-solid fa-xmark"></i>
                 </div>
-                <div class="logo"><router-link :to="{ name: 'home' }"><img src="@/assets/logo.jpg"></router-link></div>
-                <li> <router-link class="link" :to="{ name: 'home' }">Home</router-link></li>
-                <li> <router-link class="link" :to="{ name: 'contact' }">Contact</router-link></li>
-                <li> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link></li>
-                <li> <router-link class="link" :to="{ name: 'admin' }">Admin</router-link></li>
-                <li> <router-link class="link" :to="{ name: 'user-profile' }">Myprofile</router-link></li>
-
+                <div v-if="isAdmin">
+                    <div class="logo"><router-link :to="{ name: 'home' }"><img src="@/assets/logo.jpg"></router-link></div>
+                    <li> <router-link class="link" :to="{ name: 'admin' }">Admin</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'admin-major' }">Config Major</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'admin-country' }">Config Country</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'admin-profile' }">Config Profile</router-link></li>
+                </div>
+                <div v-else>
+                    <div class="logo"><router-link :to="{ name: 'home' }"><img src="@/assets/logo.jpg"></router-link></div>
+                    <li> <router-link class="link" :to="{ name: 'home' }">Home</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'contact' }">Contact</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'admin' }">Admin</router-link></li>
+                    <li v-if="isLoggedIn"> <router-link class="link" :to="{ name: 'user-profile' }">My Profile</router-link>
+                    </li>
+                    <li v-else> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link></li>
+                </div>
                 <li>
                     <button class="link" @click="logout" v-if="isLoggedIn">Logout</button>
                     <router-link v-else class="link" :to="{ name: 'login' }">Login</router-link>
@@ -70,9 +83,9 @@ export default {
         }
 
 
-        const isLoggedIn = computed(() => {
-            return store.getters['isAuthenticated'];
-        })
+        const isLoggedIn = computed(() => store.getters['isAuthenticated']);
+
+        const isAdmin = computed(() => store.getters['isAdmin']);
 
         watch(route, () => {
             isOpenMobileNav.value = false;
@@ -84,7 +97,8 @@ export default {
             toggleOpenMobileNav,
             isLoggedIn,
             logout,
-            isLoading
+            isLoading,
+            isAdmin
         }
     }
 }

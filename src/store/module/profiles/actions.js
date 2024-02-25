@@ -10,13 +10,17 @@ export default {
       throw new Error(err.response.data);
     }
   },
-  async get(context) {
+  async get(context, payload) {
+    let url = `/api/profile/get?page=${context.getters["currentPage"]}&limit=${context.getters["limit"]}`;
+    let query = context.getters["query"];
+    if (query) {
+      url += `&${query}`;
+    }
+
+    if (payload && payload.isAdmin) {
+      url += `&isAdmin=true`;
+    }
     try {
-      let url = `/api/profile/get?page=${context.getters["currentPage"]}&limit=${context.getters["limit"]}`;
-      let query = context.getters["query"];
-      if (query) {
-        url += `&${query}`;
-      }
       const { data } = await apiService.get(url);
       context.commit("setProfile", data.country);
       context.commit("setPages", data.pages);

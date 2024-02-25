@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="card-wrapper">
-            <div class="card" v-for="profile in profiles" :key="profile.id">
+            <div class="card" :class="{ disable: !profile.enable }" v-for="profile in profiles" :key="profile.id">
                 <div class="img">
                     <img :src="profile.avatar" :alt="profile.name" draggable="false">
                 </div>
@@ -10,6 +10,9 @@
                 <span>{{ profile.name }} </span>
                 <p>{{ profile.description }} </p>
                 <router-link :to="`/profile/${profile._id}`" class="detail-btn"><i class="fas fa-eye"></i> View
+                    Profile</router-link>
+                <router-link v-if="isAdmin" :to="`/admin/profile/${profile._id}`" class="detail-btn"
+                    style="margin-top: 0;"><i class="fa-solid fa-pen"></i> Edit
                     Profile</router-link>
                 <ul class="social-container">
                     <li v-if="profile.facebook">
@@ -35,17 +38,19 @@
 <script>
 import { useStore } from "vuex";
 import { computed } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
     setup() {
         const store = useStore();
         const profiles = computed(() => store.getters["profiles/profiles"]);
+        const route = useRoute();
 
         const handleLoadMore = async () => {
             store.commit('profiles/setCurrentPage', store.getters['profiles/currentPage'] + 1);
             try {
                 store.commit('setLoading', true);
-                store.dispatch('profiles/get');
+                store.dispatch('profiles/get', { isAdmin: route.name.includes('admin') });
             }
             finally {
                 store.commit('setLoading', false);
@@ -56,10 +61,20 @@ export default {
             return store.getters['profiles/currentPage'] < store.getters['profiles/pages'];
         })
 
+        const isAdmin = computed(() => store.getters['isAdmin']);
+
+        const fetchProfile = async () => {
+            store.commit('profiles/resetProfile', null);
+            await store.dispatch('profiles/get', { isAdmin: route.name.includes('admin') });
+        }
+
+        fetchProfile();
+
         return {
             profiles,
             handleLoadMore,
-            isShowLoadMore
+            isShowLoadMore,
+            isAdmin
         }
     },
 }
@@ -82,14 +97,16 @@ export default {
 
 .card {
     border-radius: 0.5rem;
-    /* border: 2px solid #e1e1e1; */
     box-shadow: 0.8rem 0.8rem 2rem #ddd, -0.8rem -0.8rem 2rem #eee;
-    /* background-color: #eee; */
     padding: 0.8rem;
     display: flex;
     align-items: center;
     flex-direction: column;
     gap: 0.2rem;
+}
+
+.card.disable {
+    background-color: #d1caca;
 }
 
 .card .img {

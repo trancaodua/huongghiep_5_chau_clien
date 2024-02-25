@@ -3,6 +3,23 @@
         <form @submit.prevent="handleSubmit">
             <h2>{{ profileId ? 'Edit Profile' : 'Create Profile' }}</h2>
             <p class="error-form-text" v-if="formError">{{ formError }}</p>
+            <div v-if="isAdmin" class="control-form" :class="{ invalid: nameInput.error }">
+                <label>Enable*</label>
+                <select v-model="enableInput.value">
+                    <option value=1>Yes</option>
+                    <option value=0>No</option>
+                </select>
+                <p class="error-text" v-if="nameInput.error">{{ nameInput.error }}</p>
+            </div>
+            <div v-if="isAdmin" class="control-form" :class="{ invalid: nameInput.error }">
+                <label>Priority*</label>
+                <select v-model="priorityInput.value">
+                    <option value=0>Normal</option>
+                    <option value=1>Medium</option>
+                    <option value=2>Hight</option>
+                </select>
+                <p class="error-text" v-if="nameInput.error">{{ nameInput.error }}</p>
+            </div>
             <div class="control-form" :class="{ invalid: nameInput.error }">
                 <label>Name*</label>
                 <input type="text" name="name" v-model.trim="nameInput.value" />
@@ -25,7 +42,11 @@
                 </div>
                 <p class="error-text" v-if="gendersInput.error">{{ gendersInput.error }}</p>
             </div>
-
+            <div class="control-form" :class="{ invalid: addressInput.error }">
+                <label>Address*</label>
+                <input type="text" name="address" v-model.trim="addressInput.value" />
+                <p class="error-text" v-if="addressInput.error">{{ addressInput.error }}</p>
+            </div>
             <div class="control-form" :class="{ invalid: imageInput.error }">
                 <label>Avatar*</label>
                 <label class="upload-image">
@@ -136,6 +157,9 @@ export default {
         const certificateInput = reactive({ value: [], error: null });
         const educationInput = reactive({ value: [], error: null });
         const experienceInput = reactive({ value: [], error: null });
+        const enableInput = reactive({ value: 1, error: null });
+        const priorityInput = reactive({ value: 0, error: null });
+        const addressInput = reactive({ value: null, error: null });
 
         const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -187,13 +211,21 @@ export default {
                 } else {
                     birthdayInput.error = null;
                 }
+
                 if (gendersInput.value === null) {
-                    console.log(gendersInput.value);
                     gendersInput.error = 'Gender is required!';
                     error = true;
                 }
                 else {
-                    nameInput.error = null;
+                    gendersInput.error = null;
+                }
+
+                if (addressInput.value === null) {
+                    addressInput.error = 'Address is required!';
+                    error = true;
+                }
+                else {
+                    gendersInput.error = null;
                 }
 
                 if (!imageInput.value) {
@@ -246,10 +278,15 @@ export default {
                     skills: skillsInput.value,
                     certificate: certificateInput.value,
                     education: educationInput.value,
-                    experience: experienceInput.value
+                    experience: experienceInput.value,
+                    address: addressInput.value
                 };
 
                 if (profileId.value) payload.id = profileId.value;
+                if (isAdmin.value) {
+                    payload.enable = enableInput.value;
+                    payload.priority = priorityInput.value;
+                }
                 await store.dispatch('profiles/create', payload);
             } catch (error) {
                 formError.value = error;
@@ -325,13 +362,16 @@ export default {
                 certificateInput.value = [];
                 educationInput.value = [];
                 experienceInput.value = [];
+                addressInput.value = null;
+                priorityInput.value = 0;
+                enableInput.value = 1;
             }
 
         })
         const fetchProfiles = async () => {
             if (!profileId.value) return;
             try {
-
+                store.commit('setLoading', true);
                 const { data } = await apiService.get(`api//user/profile/${profileId.value}`);
                 nameInput.value = data.name;
                 descriptionInput.value = data.description;
@@ -348,13 +388,19 @@ export default {
                 certificateInput.value = data.certificate;
                 educationInput.value = data.education.map(item => { return { ...item, from: new Date(item.from), to: new Date(item.to) } });
                 experienceInput.value = data.experience.map(item => { return { ...item, from: new Date(item.from), to: new Date(item.to) } });
+                priorityInput.value = data.priority;
+                enableInput.value = data.enable;
+                addressInput.value = data.address;
             }
             catch (err) {
                 console.log(err);
+            }finally{
+                store.commit('setLoading', false);
             }
         }
 
         fetchProfiles();
+        const isAdmin = computed(() => store.getters['isAdmin']);
 
         return {
             handleImage,
@@ -387,7 +433,11 @@ export default {
             experienceInput,
             handleAddExperience,
             handleRemoveExperience,
-            profileId
+            profileId,
+            isAdmin,
+            enableInput,
+            priorityInput,
+            addressInput
         }
     }
 }
@@ -435,7 +485,8 @@ form h2 {
 }
 
 .control-form input,
-textarea {
+textarea,
+select {
     font-family: "Rubik", sans-serif;
     font-weight: normal;
     font-style: normal;

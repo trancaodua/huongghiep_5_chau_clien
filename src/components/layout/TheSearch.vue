@@ -43,7 +43,7 @@
 <script>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-
+import { useRoute } from 'vue-router';
 export default {
     setup() {
         const isShowFilter = ref(false);
@@ -52,6 +52,8 @@ export default {
         const fieldsInput = ref([]);
         const gendersInput = ref([]);
         const store = useStore();
+        const route = useRoute();
+
         const countries = computed(() => {
             return store.getters['countries/countries'];
         })
@@ -96,7 +98,7 @@ export default {
                 }
                 store.commit('profiles/resetProfile', null);
                 store.commit('profiles/setCurrentPage', 1);
-                await store.dispatch('profiles/get');
+                await store.dispatch('profiles/get', { isAdmin: route.name.includes('admin') });
             } catch (error) {
                 console.log(error);
             }
@@ -104,6 +106,7 @@ export default {
                 toggleShowFilter(false);
             }
         }
+
         return {
             countries,
             fields,
