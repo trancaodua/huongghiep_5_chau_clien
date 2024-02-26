@@ -10,6 +10,8 @@ import RegisterPageVue from "./pages/RegisterPage.vue";
 import CountryPageVue from "./pages/admin/countryPage.vue";
 import FieldPageVue from "./pages/admin/fieldPage.vue";
 import ProfilePageVue from "./pages/admin/profilePage.vue";
+import MessagePageVue from './pages/admin/messagePage.vue';
+import MentorMessagePageVue from './pages/admin/mentorMessagePage.vue';
 import UserProfile from "./pages/user/ProfilePage.vue";
 import store from "./store/index.js";
 
@@ -60,6 +62,20 @@ const router = createRouter({
       name: "admin-edit-profile",
       meta: { requiresAdmin: true },
       component: CreateProfileVue,
+      props: true,
+    },
+    {
+      path: "/admin/message",
+      name: "admin-message",
+      meta: { requiresAdmin: true },
+      component: MessagePageVue,
+      props: true,
+    },
+    {
+      path: "/admin/mentor-message",
+      name: "admin-mentor-message",
+      meta: { requiresAdmin: true },
+      component: MentorMessagePageVue,
       props: true,
     },
     { path: "/login", name: "login", component: LoginPageVue },

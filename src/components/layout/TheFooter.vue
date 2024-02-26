@@ -27,20 +27,69 @@
         </div>
         <div class="contact-contianer">
             <h3>Connect with me</h3>
-            <form>
+            <form @submit.prevent="submitMessage">
+                <div class="form-control">
+                    <label for="name">Name</label>
+                    <input v-model.trim="name" type="text" placeholder="Enter your name" name="name">
+                </div>
                 <div class="form-control">
                     <label for="email">Email</label>
-                    <input type="text" placeholder="Enter your email" name="email">
+                    <input v-model.trim="email" type="text" placeholder="Enter your email" name="email">
                 </div>
                 <div class="form-control">
                     <label for="email">Message</label>
-                    <input type="text" placeholder="Message" name="message">
+                    <textarea v-model.trim="message" placeholder="Message" name="message" />
                 </div>
                 <button type="submit">Send</button>
             </form>
         </div>
     </footer>
 </template>
+
+<script>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import apiService from '@/app/apiService';
+
+export default {
+    setup() {
+        const name = ref(null);
+        const email = ref(null);
+        const message = ref(null);
+        const store = useStore();
+
+        const submitMessage = async () => {
+            try {
+                if (!name.value || !email.value || !message.value) {
+                    return;
+                }
+
+                store.commit('setLoading', true);
+                await apiService.post('/api/message/create', {
+                    name: name.value,
+                    email: email.value,
+                    message: message.value
+                })
+            }
+            catch (error) {
+                console.log(error);
+            }
+            finally {
+                store.commit('setLoading', false);
+            }
+        }
+
+        return {
+            submitMessage,
+            name,
+            email,
+            message
+        }
+    },
+}
+</script>
+
+
 <style scoped>
 footer {
     display: grid;

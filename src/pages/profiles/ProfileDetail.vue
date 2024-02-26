@@ -81,10 +81,10 @@
         </div>
         <div class="contact-container" ref="contactEl">
             <h4>Get In Touch</h4>
-            <form>
-                <input placeholder="Name*:">
-                <input placeholder="Email*:">
-                <textarea rows="6" aceholder="Message*:" />
+            <form @submit.prevent="submitMessage">
+                <input placeholder="Name*:" v-model.trim="name">
+                <input placeholder="Email*:" v-model.trim="email">
+                <textarea rows="6" aceholder="Message*:" v-model="message" />
                 <button>Send</button>
             </form>
         </div>
@@ -94,6 +94,7 @@
 <script>
 import apiService from '@/app/apiService';
 import { reactive, ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
     props: ['id'],
@@ -118,6 +119,10 @@ export default {
         });
         const isShowExperience = ref(true);
         const contactEl = ref(null);
+        const name = ref(null);
+        const email = ref(null);
+        const message = ref(null);
+        const store = useStore();
 
         const getProfile = async () => {
             try {
@@ -150,6 +155,29 @@ export default {
             return day + '/' + month + '/' + year;
         }
 
+        const submitMessage = async () => {
+            try {
+                if (!name.value || !email.value || !message.value) {
+                    return;
+                }
+
+                store.commit('setLoading', true);
+                await apiService.post('/api/message/create', {
+                    name: name.value,
+                    email: email.value,
+                    message: message.value,
+                    profile: props.id
+
+                })
+            }
+            catch (error) {
+                console.log(error);
+            }
+            finally {
+                store.commit('setLoading', false);
+            }
+        }
+
         getProfile();
 
         return {
@@ -159,7 +187,11 @@ export default {
             setShowExperience,
             contactEl,
             scrollToCotactForm,
-            getFormattedDate
+            getFormattedDate,
+            name,
+            email,
+            message,
+            submitMessage
         }
     }
 }
@@ -477,7 +509,7 @@ export default {
 
 .contact-container form {
     width: 100%;
-    margin: 0 5rem;
+    padding: 0 1rem;
     display: flex;
     flex-direction: column;
     align-content: flex-start;
