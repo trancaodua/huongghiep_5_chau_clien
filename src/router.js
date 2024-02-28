@@ -27,12 +27,6 @@ const router = createRouter({
     { path: "/profile/:id", component: ProfileDetailVue, props: true },
     { path: "/contact", name: "contact", component: ContactPageVue },
     {
-      path: "/admin",
-      component: ProfilePageVue,
-      meta: { requiresAdmin: true },
-      name: "admin",
-    },
-    {
       path: "/admin/country",
       name:'admin-country',
       component: CountryPageVue,
@@ -75,6 +69,12 @@ const router = createRouter({
       meta: { requiresAdmin: true },
       component: MentorMessagePageVue,
       props: true,
+    },
+    {
+      path: "/admin",
+      component: ProfilePageVue,
+      meta: { requiresAdmin: true },
+      name: "admin",
     },
     { path: "/login", name: "login", component: LoginPageVue },
     { path: "/register", name: "register", component: RegisterPageVue },
