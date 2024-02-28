@@ -3,9 +3,10 @@ import apiService from "@/app/apiService";
 export default {
   async create(context, payload) {
     try {
-      await apiService.post("/api/profile/create", {
+      const res = await apiService.post("/api/profile/create", {
         ...payload,
       });
+      return res;
     } catch (err) {
       throw new Error(err.response.data);
     }

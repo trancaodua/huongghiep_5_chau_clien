@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" ref="container">
         <form @submit.prevent="handleSubmit">
             <h2>{{ profileId ? 'Edit Profile' : 'Create Profile' }}</h2>
             <p class="error-form-text" v-if="formError">{{ formError }}</p>
@@ -9,16 +9,16 @@
                     <option value=1>Yes</option>
                     <option value=0>No</option>
                 </select>
-                <p class="error-text" v-if="nameInput.error">{{ nameInput.error }}</p>
+                <p class="error-text" v-if="enableInput.error">{{ enableInput.error }}</p>
             </div>
-            <div v-if="isAdmin" class="control-form" :class="{ invalid: nameInput.error }">
+            <div v-if="isAdmin" class="control-form" :class="{ invalid: priorityInput.error }">
                 <label>Priority*</label>
                 <select v-model="priorityInput.value">
                     <option value=0>Normal</option>
                     <option value=1>Medium</option>
                     <option value=2>Hight</option>
                 </select>
-                <p class="error-text" v-if="nameInput.error">{{ nameInput.error }}</p>
+                <p class="error-text" v-if="priorityInput.error">{{ priorityInput.error }}</p>
             </div>
             <div class="control-form" :class="{ invalid: nameInput.error }">
                 <label>Name*</label>
@@ -129,6 +129,7 @@ import TheSkills from '@/components/ui/form/TheSkills.vue';
 import TheCertificate from '@/components/ui/form/TheCertificate.vue';
 import TheEducation from '@/components/ui/form/TheEducationExperience.vue';
 import apiService from '@/app/apiService';
+import { useRouter } from 'vue-router';
 
 export default {
     props: ['id'],
@@ -140,7 +141,9 @@ export default {
     },
     setup(props) {
         const store = useStore()
+        const router = useRouter();
         const previewImage = ref(null);
+        const container = ref(null);
         const nameInput = reactive({ value: null, error: null });
         const descriptionInput = reactive({ value: null, error: null });
         const imageInput = reactive({ value: null, error: null });
@@ -261,7 +264,10 @@ export default {
                 }
 
 
-                if (error) return;
+                if (error) {
+                    scrollToHead();
+                    return;
+                }
 
                 const payload = {
                     name: nameInput.value,
@@ -287,9 +293,12 @@ export default {
                     payload.enable = enableInput.value;
                     payload.priority = priorityInput.value;
                 }
-                await store.dispatch('profiles/create', payload);
+
+                const { data } = await store.dispatch('profiles/create', payload);
+                router.push(`/profile/${data.profileId}`);
             } catch (error) {
                 formError.value = error;
+                scrollToHead();
             } finally {
                 store.commit('setLoading', false);
             }
@@ -394,13 +403,17 @@ export default {
             }
             catch (err) {
                 console.log(err);
-            }finally{
+            } finally {
                 store.commit('setLoading', false);
             }
         }
 
         fetchProfiles();
         const isAdmin = computed(() => store.getters['isAdmin']);
+
+        const scrollToHead = () => {
+            container.value.scrollIntoView({ behavior: 'smooth' });
+        }
 
         return {
             handleImage,
@@ -437,7 +450,9 @@ export default {
             isAdmin,
             enableInput,
             priorityInput,
-            addressInput
+            addressInput,
+            scrollToHead,
+            container
         }
     }
 }

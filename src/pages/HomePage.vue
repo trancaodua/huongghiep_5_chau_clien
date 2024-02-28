@@ -1,12 +1,13 @@
 <template>
     <the-slider></the-slider>
-    <h4><i class="fa-solid fa-quote-left"></i> Hire a ProVA for any skill you need. Take a look at some of the virtual worker who possess incredible skills,
+    <h4><i class="fa-solid fa-quote-left"></i> Hire a ProVA for any skill you need. Take a look at some of the virtual
+        worker who possess incredible skills,
         abilities and experiences. <i class="fa-solid fa-quote-right"></i></h4>
     <!-- <div>
         <hr class="divider-section">
     </div> -->
-    <the-search></the-search>
     <h5 class="span">Our Menter</h5>
+    <the-search></the-search>
     <the-profiles></the-profiles>
 </template>
 <script>
@@ -44,6 +45,7 @@ h5 {
     padding-left: 25px;
     padding-right: 25px;
     margin: 0.5rem auto;
+    margin-top: 4rem;
     font-size: 1.2rem;
     line-height: 2rem;
     max-width: 500px;
@@ -57,7 +59,7 @@ h5 {
     width: 50em;
     margin: 0 auto;
     background-image: -webkit-linear-gradient(left, white 2%, #1F9F96 50%, white 98%);
-    border-top: 1px solid rgba(0,0,0,.1);
+    border-top: 1px solid rgba(0, 0, 0, .1);
     overflow: visible;
 }
 </style>

@@ -4,19 +4,20 @@
         <div class="navbar">
             <div class="logo"><router-link :to="{ name: 'home' }"><img src="@/assets/logo.jpg"></router-link></div>
             <ul v-if="isAdmin" class="links">
-                <li> <router-link class="link" :to="{ name: 'admin' }">Admin</router-link></li>
+                <li> <router-link class="link" :to="{ name: 'admin-profile' }">Admin</router-link></li>
+                <li> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'admin-major' }">Config Major</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'admin-country' }">Config Country</router-link></li>
-                <li> <router-link class="link" :to="{ name: 'admin-profile' }">Config Profile</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'admin-message' }">Admin Message</router-link></li>
                 <li> <router-link class="link" :to="{ name: 'admin-mentor-message' }">Mentor Message</router-link></li>
             </ul>
             <ul v-else class="links">
                 <li> <router-link class="link" :to="{ name: 'home' }">Home</router-link></li>
-                <li> <router-link class="link" :to="{ name: 'contact' }">Contact</router-link></li>
+                <li> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link>
+                </li>
                 <li v-if="isLoggedIn"> <router-link class="link" :to="{ name: 'user-profile' }">My Profile</router-link>
                 </li>
-                <li v-else> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link>
+                <li v-else> <router-link class="link" :to="{ name: 'register' }">Register</router-link>
                 </li>
             </ul>
             <button @click="logout" v-if="isLoggedIn" class="action_btn"><i
@@ -35,17 +36,21 @@
                 </div>
                 <div v-if="isAdmin">
                     <div class="logo"><router-link :to="{ name: 'home' }"><img src="@/assets/logo.jpg"></router-link></div>
-                    <li> <router-link class="link" :to="{ name: 'admin' }">Admin</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'admin-profile' }">Admin</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link></li>
                     <li> <router-link class="link" :to="{ name: 'admin-major' }">Config Major</router-link></li>
                     <li> <router-link class="link" :to="{ name: 'admin-country' }">Config Country</router-link></li>
-                    <li> <router-link class="link" :to="{ name: 'admin-profile' }">Config Profile</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'admin-message' }">Admin Message</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'admin-mentor-message' }">Mentor Message</router-link></li>
                 </div>
                 <div v-else>
                     <div class="logo"><router-link :to="{ name: 'home' }"><img src="@/assets/logo.jpg"></router-link></div>
                     <li> <router-link class="link" :to="{ name: 'home' }">Home</router-link></li>
+                    <li> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link></li>
                     <li v-if="isLoggedIn"> <router-link class="link" :to="{ name: 'user-profile' }">My Profile</router-link>
                     </li>
-                    <li v-else> <router-link class="link" :to="{ name: 'createProfile' }">Create Profile</router-link></li>
+                    <li v-else> <router-link class="link" :to="{ name: 'register' }">Register</router-link>
+                    </li>
                 </div>
                 <li>
                     <button class="link" @click="logout" v-if="isLoggedIn">Logout</button>

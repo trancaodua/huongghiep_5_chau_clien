@@ -84,6 +84,7 @@ export default {
 .container {
     width: 100%;
     padding: 1rem;
+    margin-bottom: 5rem;
 }
 
 .card-wrapper {

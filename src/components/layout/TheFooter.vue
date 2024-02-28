@@ -5,10 +5,30 @@
             <p>Create professional-looking resumes and easy to use in a fraction of the time. The greatest online resume
                 builder can provide you a significant advantage in the job market.</p>
         </div>
+        <div class="contact-contianer">
+            <h3>Connect with me</h3>
+            <form @submit.prevent="submitMessage">
+                <label style="width:auto" v-if="notify">{{ notify }}</label>
+                <div class="form-control">
+                    <label for="name">Name</label>
+                    <input v-model.trim="name" type="text" placeholder="Enter your name" name="name">
+                </div>
+                <div class="form-control">
+                    <label for="email">Email</label>
+                    <input v-model.trim="email" type="email" placeholder="Enter your email" name="email">
+                </div>
+                <div class="form-control">
+                    <label for="email">Message</label>
+                    <textarea v-model.trim="message" placeholder="Message" name="message" />
+                </div>
+                <button type="submit">Send</button>
+            </form>
+        </div>
         <div class="menu-wrapper">
             <ul class="menu-container">
                 <li><router-link class="link" :to="{ name: 'home' }">Home</router-link> </li>
-                <li><router-link class="link" :to="{ name: 'contact' }">Contact</router-link> </li>
+                <li><router-link class="link" :to="{ name: 'contact' }">Create Profile</router-link> </li>
+                <li><router-link class="link" :to="{ name: 'register' }">Register</router-link> </li>
             </ul>
             <ul class="social-container">
                 <li>
@@ -25,24 +45,6 @@
                 </li>
             </ul>
         </div>
-        <div class="contact-contianer">
-            <h3>Connect with me</h3>
-            <form @submit.prevent="submitMessage">
-                <div class="form-control">
-                    <label for="name">Name</label>
-                    <input v-model.trim="name" type="text" placeholder="Enter your name" name="name">
-                </div>
-                <div class="form-control">
-                    <label for="email">Email</label>
-                    <input v-model.trim="email" type="text" placeholder="Enter your email" name="email">
-                </div>
-                <div class="form-control">
-                    <label for="email">Message</label>
-                    <textarea v-model.trim="message" placeholder="Message" name="message" />
-                </div>
-                <button type="submit">Send</button>
-            </form>
-        </div>
     </footer>
 </template>
 
@@ -57,6 +59,7 @@ export default {
         const email = ref(null);
         const message = ref(null);
         const store = useStore();
+        const notify = ref(null);
 
         const submitMessage = async () => {
             try {
@@ -70,9 +73,13 @@ export default {
                     email: email.value,
                     message: message.value
                 })
+                name.value = null;
+                email.value = null;
+                message.value = null;
+                notify.value = 'Send Message is successfully.';
             }
             catch (error) {
-                console.log(error);
+                notify.value = error;
             }
             finally {
                 store.commit('setLoading', false);
@@ -83,7 +90,8 @@ export default {
             submitMessage,
             name,
             email,
-            message
+            message,
+            notify
         }
     },
 }
@@ -113,6 +121,7 @@ footer {
     font-size: 1rem;
     line-height: 2rem;
     text-align: left;
+    padding: 2rem;
 }
 
 .logo img {
@@ -121,7 +130,6 @@ footer {
 
 .menu-wrapper {
     padding: 1rem;
-    border-right: 1px solid #1F9F96;
 }
 
 .menu-container {
@@ -176,7 +184,8 @@ footer {
     grid-template-columns: auto 1fr;
 }
 
-.contact-contianer form input {
+.contact-contianer form input,
+textarea {
     height: 45px;
     background: #fff;
     border-radius: 30px;
@@ -210,6 +219,12 @@ footer {
     footer {
         grid-template-columns: auto;
         grid-auto-rows: repeat(3, auto);
+    }
+
+    .copyring-contaner,
+    .contact-contianer {
+        border: none;
+        /* border-bottom: 1px solid #1F9F96; */
     }
 }
 

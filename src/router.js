@@ -4,7 +4,6 @@ import HomePageVue from "./pages/HomePage.vue";
 import CreateProfileVue from "./pages/profiles/CreateProfile.vue";
 import ProfileDetailVue from "./pages/profiles/ProfileDetail.vue";
 import ContactPageVue from "./pages/ContactPage.vue";
-import AdminPageVue from "./pages/admin/indexPage.vue";
 import LoginPageVue from "./pages/LoginPage.vue";
 import RegisterPageVue from "./pages/RegisterPage.vue";
 import CountryPageVue from "./pages/admin/countryPage.vue";
@@ -29,7 +28,7 @@ const router = createRouter({
     { path: "/contact", name: "contact", component: ContactPageVue },
     {
       path: "/admin",
-      component: AdminPageVue,
+      component: ProfilePageVue,
       meta: { requiresAdmin: true },
       name: "admin",
     },

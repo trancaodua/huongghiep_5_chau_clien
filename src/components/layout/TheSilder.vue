@@ -132,7 +132,6 @@ export default {
     display: block;
     width: 100%;
     height: auto;
-    background-color: red;
     flex-shrink: 0;
 }
 
@@ -151,7 +150,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
     position: absolute;
     top: 50%;
     z-index: 10;
