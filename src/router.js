@@ -42,7 +42,6 @@ const router = createRouter({
       path: "/admin/register",
       component: RegisterPageVue,
       name: "admin-register",
-      meta: { requiresAdmin: true },
     },
     {
       path: "/admin/field",
