@@ -8,7 +8,7 @@ export default {
       });
       return res;
     } catch (err) {
-      throw new Error(err.response.data);
+      throw new Error(err);
     }
   },
   async get(context, payload) {
@@ -26,7 +26,7 @@ export default {
       context.commit("setProfile", data.country);
       context.commit("setPages", data.pages);
     } catch (error) {
-      throw new Error(error.response.data);
+      throw new Error(error);
     }
   },
 };

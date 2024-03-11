@@ -33,6 +33,9 @@ export default {
     const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
     let role = localStorage.getItem("role");
+    if(role){
+      JSON.parse(role)
+    }
     role = role ? JSON.parse(role) : [];
     apiService.defaults.headers["X-CSRF-Token"] = token;
 
